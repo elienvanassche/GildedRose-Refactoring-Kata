@@ -15,7 +15,7 @@ class GildedRoseTest2 {
             new Item("+5 Dexterity Vest", 1, 30) , //
             new Item("Elixir of the Mongoose", 1, 20), //
             new Item("Aged Brie", 1, 0), //
-            new Item("Conjured Mana Cake", 1, 6) };
+            };
 
         GildedRose app = new GildedRose(items);
         app.updateQuality();
