@@ -12,11 +12,11 @@ class GildedRoseTest8 {
      */
     void foo() {
         Item[] items = new Item[]{
-            new Item("Conjured Mana Cake", 1, 4),
+            new Item("Conjured Mana Cake", 1, 6),
         };
         GildedRose app = new GildedRose(items);
         app.updateQuality();
-        assertEquals(2, app.items[0].quality);
+        assertEquals(4, app.items[0].quality);
         app.updateQuality();
         assertEquals(0, app.items[0].quality);
         app.updateQuality();
