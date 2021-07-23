@@ -12,30 +12,33 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            //degrade or increase quality item
-            if(Stream.of("Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros").noneMatch(item.name::equals)
-                && item.quality>0){
-                item.quality--;
-                if(item.name.equals("Conjured Mana Cake") && item.quality>0) item.quality--;
-            } else if (item.quality < 50) {
-                item.quality++;
-                if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                    if (item.sellIn < 11) item.quality ++;
-                    if (item.sellIn < 6) item.quality ++;
-                }
-            }
-
-            //degrade sellIn item
+            //decrease sellIn
             if (!item.name.equals("Sulfuras, Hand of Ragnaros")) item.sellIn --;
 
-            //quality degrades or increases twice as fast or drops to 0
-            if (item.sellIn < 0) {
-                if (item.name.equals("Aged Brie") && item.quality<50) item.quality++;
-                else if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) item.quality=0;
-                else if (Arrays.asList("+5 Dexterity Vest", "Elixir of the Mongoose", "Conjured Mana Cake").contains(item.name) && item.quality > 0){
-                    item.quality--;
-                    if(item.name.equals("Conjured Mana Cake") && item.quality>0) item.quality --;
-                }
+            //factor for double increase/degrade if sellIn negative
+            int factor;
+            if (item.sellIn < 0) factor = 2;
+            else factor = 1;
+
+            //change quality item
+            switch(item.name){
+                case "Aged Brie":
+                    item.quality = Math.min(item.quality + factor,50);
+                    break;
+                case "Backstage passes to a TAFKAL80ETC concert":
+                    if (item.sellIn<0) item.quality=0;
+                    else if(item.sellIn<5) item.quality = Math.min(item.quality+3,50);
+                    else if(item.sellIn<10) item.quality = Math.min(item.quality+2,50);
+                    else item.quality = Math.min(item.quality+1,50);
+                    break;
+                case "Conjured Mana Cake":
+                    item.quality = Math.max(item.quality-2*factor,0);
+                    break;
+                case "Sulfuras, Hand of Ragnaros":
+                    break;
+                default:
+                    item.quality = Math.max(item.quality - factor, 0);
+                    break;
             }
         }
     }
